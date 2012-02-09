@@ -205,6 +205,7 @@ var RESTRequest = this.RESTRequest = new Class({
         } else if (this.options.raw != undefined) {
             xhr.send(this.options.raw);
         } else {
+	  console.log("Sending " + JSON.encode(data));
             xhr.send(data);
         }
 

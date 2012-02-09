@@ -426,7 +426,7 @@ window.addEvent('domready', function() {
         document.getElement('input[name="ktoken"]').set('value', this.get('ktoken'));
         document.getElement('input[name="domain"]').set('value', this.get('domain'));
         document.getElement('input[name="type"]').set('value', this.get('type'));
-        document.getElement('input[name="method"]').set('value', 'POST');
+        document.getElement('input[name="method"]').set('value', 'GET');
         document.getElement('form[name="request"]').fireEvent('submit', new DOMEvent);
     });
 
@@ -627,6 +627,10 @@ window.addEvent('domready', function() {
                 }
             });
 
+	  // [PJW] since we've disabled user selection
+	  // default content type
+          headers['Content-Type'] = 'application/x-www-form-urlencoded';
+
             // validate headers
             custom.headers.keys.each(function(key, index) {
                 if (unsafe.contains(key.toLowerCase())) {
@@ -650,9 +654,10 @@ window.addEvent('domready', function() {
                 return false;
             } else {
               // special condition for encoding
-              if (request.encoding) {
-                request['Content-Type'] = request['Content-Type'] + '; charset=' + request.encoding;
-              }
+              //if (request.encoding) {
+              //  request['Content-Type'] = request['Content-Type'] + '; charset=' + request.encoding;
+              //}
+
 
 	      var schema  = "http://";
 	      var api_version = "sky";
@@ -665,7 +670,9 @@ window.addEvent('domready', function() {
 				    request.type
 				   ];
 	      var esl = schema + esl_components.join("/");
-	      console.log("Raising " + esl);
+//	      var esl = "http://www.postbin.org/sj7ta2";
+	      console.log("Raising " + esl + "with " + request.method);
+	      console.log("Attributes " + JSON.stringify(request.data));
 
                 var options = {
                     'url': esl,
@@ -755,7 +762,8 @@ window.addEvent('domready', function() {
                                 //'Accept-Language': 'en-US,en;q=0.8',
                                 'Connection': 'keep-alive',
                                 //'Content-Length': '34',
-                                'Content-Type': 'application/xml',
+//                                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+// orig                                'Content-Type': 'application/xml',
                                 //'Cookie': '__qca=P0-2074128619-1316995740016; __utma=71985868.1147819601.1316995740.1317068965.1317073948.4; __utmc=71985868; __utmz=71985868.1316995740.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
                                 //'Host': 'www.codeinchaos.com',
                                 'Origin': 'chrome-extension: //kynetx-event-console',
