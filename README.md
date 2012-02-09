@@ -1,6 +1,6 @@
 # Kynetx Event Console
 
-a console for raising and debugging events with the Sky API.
+a console for raising and debugging events with the Sky API. 
 
 ## Permissions Breakdown:
 
@@ -12,6 +12,9 @@ we don't collect any personal data and we don't want access to your data on all 
 
 
 ## Features:
+
+* Automatic create of ESL from tokens, domains, types, etc.
+* Support for KRE debug data
 
 ## Hat Tip:
 
