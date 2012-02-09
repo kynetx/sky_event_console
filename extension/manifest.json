@@ -1,8 +1,10 @@
-{
-    "version": "4.0.2",
 
-    "name": "REST Console Launcher",
-    "description": "This is a toolbar launcher for REST Console. get the REST Console App at http://www.restconsole.com",
+
+{
+    "version": "0.9",
+
+    "name": "Kynetx Event Console",
+    "description": "Kynetx Event Console is an EventAPI Event Visualizer and Constructor tool, helps developers build, debug and test Evented APIs.",
 
     "background_page": "background.html",
 

@@ -10,6 +10,11 @@ Error = function(title, text, element) {
     }
 };
 
+console.log("starting...");
+
+
+
+
 // add events
 window.addEvent('domready', function() {
     // enable smooth scrolling
@@ -142,7 +147,7 @@ window.addEvent('domready', function() {
 
     // messages close action
     document.getElements('.messages .alert-message a.close').addEvent('click', function(event) {
-        event.preventDefault();
+        //event.preventDefault();
 
         this.getParent('.messages').addClass('hide').getElements('.alert-message').addClass('hide');
     });
@@ -360,7 +365,7 @@ window.addEvent('domready', function() {
                     'consumer_key': data.consumer_key,
                     'consumer_secret': data.consumer_secret,
                     'scope' : data.scope,
-                    'app_name' : 'REST Console'
+                    'app_name' : 'Kynetx Event Console'
                 });
                 oAuth.authorize();
             }
@@ -418,15 +423,17 @@ window.addEvent('domready', function() {
     document.id('responseBody').addEvent('click:relay(a[href])', function(event) {
         event.preventDefault();
 
-        document.getElement('input[name="uri"]').set('value', this.get('href'));
-        document.getElement('input[name="method"]').set('value', 'GET');
+        document.getElement('input[name="ktoken"]').set('value', this.get('ktoken'));
+        document.getElement('input[name="domain"]').set('value', this.get('domain'));
+        document.getElement('input[name="type"]').set('value', this.get('type'));
+        document.getElement('input[name="method"]').set('value', 'POST');
         document.getElement('form[name="request"]').fireEvent('submit', new DOMEvent);
     });
 
-    document.getElement('form[name="request"] input[name="uri"]').addEvent('change', function(event) {
-        if (this.get('value').length > 0 && this.get('value').substr(0, 4) != 'http') {
-            this.set('value', 'http://' + this.get('value'));
-        }
+    document.getElement('form[name="request"] input[name="ktoken"]').addEvent('change', function(event) {
+        //if (this.get('value').length > 0 && this.get('value').substr(0, 4) != 'http') {
+        //    this.set('value', 'http://' + this.get('value'));
+        //}
     });
 
     // request form actions
@@ -508,6 +515,7 @@ window.addEvent('domready', function() {
         'reset': function(event) {
             event.preventDefault();
 
+
             var defaults = {
                 'request': JSON.decode(localStorage.getItem('request-defaults')),
                 'params': JSON.decode(localStorage.getItem('request-params-defaults')),
@@ -558,7 +566,6 @@ window.addEvent('domready', function() {
                 row.inject(container, 'top');
             });
         },
-
         'submit': function(event) {
             event.preventDefault();
 
@@ -642,19 +649,32 @@ window.addEvent('domready', function() {
                 // stop on error
                 return false;
             } else {
-                // special condition for encoding
-                if (request.encoding) {
-                    request['Content-Type'] = request['Content-Type'] + '; charset=' + request.encoding;
-                }
+              // special condition for encoding
+              if (request.encoding) {
+                request['Content-Type'] = request['Content-Type'] + '; charset=' + request.encoding;
+              }
+
+	      var schema  = "http://";
+	      var api_version = "sky";
+	      var esl_components = [request.engine,
+				    api_version,
+				    "event",
+				    request.ktoken,
+				    Math.floor(Math.random()*100000000001), // eid
+				    request.domain,
+				    request.type
+				   ];
+	      var esl = schema + esl_components.join("/");
+	      console.log("Raising " + esl);
 
                 var options = {
-                    'url': request.uri,
+                    'url': esl,
                     'method': request.method,
                     'encoding': request.encoding,
                     'timeout': request.timeout * 1000,
                     'raw': request.raw,
                     'data': request.data,
-                    'files': this.getElement('input[name="files"]').files,
+                    //'files': this.getElement('input[name="files"]').files,
                     'file_key': request.file_key,
                     'headers': headers,
 
@@ -738,7 +758,7 @@ window.addEvent('domready', function() {
                                 'Content-Type': 'application/xml',
                                 //'Cookie': '__qca=P0-2074128619-1316995740016; __utma=71985868.1147819601.1316995740.1317068965.1317073948.4; __utmc=71985868; __utmz=71985868.1316995740.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
                                 //'Host': 'www.codeinchaos.com',
-                                'Origin': 'chrome-extension: //rest-console-id',
+                                'Origin': 'chrome-extension: //kynetx-event-console',
                                 'User-Agent': navigator.userAgent
                             };
 
@@ -750,9 +770,24 @@ window.addEvent('domready', function() {
 
                             var responseHeaders = 'Status Code: {0}\n{1}'.substitute([this.xhr.status, this.xhr.getAllResponseHeaders()]);
 
+			  // split response into debug and response
+			  var responseLines = responseText.split("\n");
+			  var directive = "";
+			  var debug = "";
+			  for (var i=0;i<responseLines.length;i++) {
+			    if(responseLines[i].match(/^\/\//)) {
+			      //console.log("DEBUG ", responseLines[i]);
+			      debug += responseLines[i] + "\n";
+			    } else {
+			      //console.log("DIRECTIVE ", responseLines[i]);
+			      directive += responseLines[i]+"\n";
+			    }
+			  }
+
                             // setup response area
                             document.id('rawBody').set('text', responseText)
-                            document.id('responseBody').set('text', responseText);
+                            document.id('responseBody').set('text', directive);
+                            document.id('responseDebug').set('text', debug);
                             document.id('responseHeaders').set('text', responseHeaders).store('unstyled', responseHeaders);
                             document.id('requestBody').set('text', requestText).store('unstyled', requestText);
                             document.id('requestHeaders').set('text', requestHeaders).store('unstyled', requestHeaders);
@@ -768,6 +803,12 @@ window.addEvent('domready', function() {
                                 }
                             }
 
+			  style = 'js';
+
+                          directive = beautify.js(directive);
+                          document.id('responseBody').set('text', directive);
+                          document.id('responseDebug').set('text', debug);
+/*
                             var style = 'auto';
 
                             switch (contentType) {
@@ -781,10 +822,6 @@ window.addEvent('domready', function() {
                                 case 'application/ecmascript':
                                 case 'application/javascript':
                                 case 'application/json':
-                                    style = 'js';
-
-                                    responseText = beautify.js(responseText);
-                                    document.id('responseBody').set('text', responseText);
                                     break;
 
                                 case 'application/atom+xml':
@@ -792,7 +829,7 @@ window.addEvent('domready', function() {
                                 case 'application/atomserv+xml':
                                 case 'application/beep+xml':
                                 case 'application/davmount+xml':
-                                case 'application/docbook+xml':
+  v                              case 'application/docbook+xml':
                                 case 'application/rdf+xml':
                                 case 'application/rss+xml':
                                 case 'application/xml':
@@ -857,14 +894,14 @@ window.addEvent('domready', function() {
                                     doc.write('<img src="' + src + '"/>');
                                     doc.close();
                                     break;
- */
                             }
+ */
 
                             // store the text for later use
                             document.id('responseBody').store('unstyled', responseText);
 
                             // trigger syntax highlighting
-                            document.getElement('input[name="highlight"][value="' + style + '"]').fireEvent('click');
+//                            document.getElement('input[name="highlight"][value="' + style + '"]').fireEvent('click');
 
                             // scroll to the response area
                             document.getElement('a[href="#response"]').fireEvent('click', new DOMEvent());
@@ -876,9 +913,9 @@ window.addEvent('domready', function() {
                 };
 
                 // don't force the content-type header
-                if (options.files.length > 0) {
-                    delete options.headers['Content-Type'];
-                }
+                // if (options.files.length > 0) {
+                //     delete options.headers['Content-Type'];
+                // }
 
                 window.XHR = new RESTRequest(options).send();
             }
