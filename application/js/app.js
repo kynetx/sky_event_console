@@ -176,7 +176,7 @@ window.addEvent('domready', function() {
 
             row = this.getParent().clone();
             this.getParent().grab(row, 'before');
-            row.getElements('input').set('disabled', false)[0].focus();
+            row.getElements('input[type="text"]').set('disabled', true)[0].focus();
         },
 
         'click:relay(.btn.danger)': function(event) {
