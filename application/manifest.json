@@ -1,12 +1,11 @@
 {
-    "version": "0.9",
+    "version": "0.9.1",
 
     "name": "Kynetx Event Console",
     "description": "Kynetx Event Console is an EventAPI Event Visualizer and Constructor tool, helps developers build, debug and test Evented APIs.",
 
-
     "options_page": "index.html#options",
-    "background_page": "background.html",
+    "background": {"page":"background.html"},
 
     "icons": {
         "16": "images/logo/16.png",
@@ -23,6 +22,10 @@
 
     "permissions": [
         "tabs",
-        "*://*/*"
-    ]
+        "https://cs.kobj.net/*"
+    ],
+
+    "content_security_policy": "script-src 'self' https://cs.kobj.net; object-src 'self'",
+
+    "manifest_version": 2
 }

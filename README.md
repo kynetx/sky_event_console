@@ -4,12 +4,11 @@ a console for raising and debugging events with the Sky API.
 
 ## Permissions Breakdown:
 
-* Your tabs and browsing activity: The only access to tabs we need is for launching the oAuth Authorization page to the 3rd party oAuth provider.
+The application makes a call to cs.kobj.net to raise the event. 
 
-* Your data on all websites: This is somewhat misleading, we ask for `*://*/*` access so that developers can make API calls to ANY URL ...
+## Using
 
-we don't collect any personal data and we don't want access to your data on all websites, we simply have to use that permission so developers can use the App on all urls.
-
+You can load the unpacked application from the Chrome Extensions page. Point Chrome at the "application" directory and it should work. 
 
 ## Features:
 

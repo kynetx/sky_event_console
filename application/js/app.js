@@ -659,7 +659,7 @@ window.addEvent('domready', function() {
               //}
 
 
-	      var schema  = "http://";
+	      var schema  = "https://";
 	      var api_version = "sky";
 	      var esl_components = [request.engine,
 				    api_version,
