@@ -2,10 +2,6 @@
 
 A console for raising and debugging events with the Sky API. 
 
-## Permissions Breakdown:
-
-The application makes a call to cs.kobj.net to raise the event. 
-
 ## Using
 
 1. Download from [Github](https://github.com/kynetx/sky_event_console)
@@ -19,7 +15,7 @@ The application makes a call to cs.kobj.net to raise the event.
 5. Open a new tab and the icon should be visible as an "app" choice. Click on it. 
 
 
-## Features:
+## Features
 
 * Automatic create of ESL from tokens, domains, types, etc.
 * Support for KRE debug data
@@ -27,6 +23,10 @@ The application makes a call to cs.kobj.net to raise the event.
 ## Contributing
 
 Contributions to the code are welcome. If you'd like contribute, please fork this project on Github, modify as desired, and submit a Pull Request. 
+
+## Permissions Breakdown
+
+The application makes a call to cs.kobj.net to raise the event. 
 
 ## Hat Tip:
 
