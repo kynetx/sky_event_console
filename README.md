@@ -22,7 +22,7 @@ A console for raising and debugging events with the Sky API.
 
 ## Contributing
 
-Contributions to the code are welcome. If you'd like contribute, please fork this project on Github, modify as desired, and submit a Pull Request. 
+Contributions to the code are welcome. If you wish to contribute to this project, please fork it on GitHub, push your change to a named branch, then send a pull request. If it is a big feature, you might want to contact us first to make sure it's something that we'll accept. 
 
 ## Permissions Breakdown
 
