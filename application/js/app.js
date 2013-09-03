@@ -10,9 +10,7 @@ Error = function(title, text, element) {
     }
 };
 
-console.log("starting...");
-
-
+console.log("Starting Kynetx Event Console...");
 
 
 // add events
@@ -70,7 +68,7 @@ window.addEvent('domready', function() {
         ul.getNext('ul').getElements(' > li').addClass('hide');
         ul.getNext('ul').getElement(this.get('href')).getParent().removeClass('hide');
 
-        _gaq.push(['_trackEvent', this.get('text'), 'clicked']);
+//        _gaq.push(['_trackEvent', this.get('text'), 'clicked']);
     });
 
     // remove errors
@@ -103,14 +101,14 @@ window.addEvent('domready', function() {
             document.getElement('select[name="theme"] option[value="' + theme + '"]').set('selected', true);
             document.head.getElementById('theme').set('href', 'css/prettify/' + theme + '.css');
 
-            _gaq.push(['_trackEvent', 'Theme', theme]);
+//            _gaq.push(['_trackEvent', 'Theme', theme]);
         }
     }).fireEvent('change');
 
     document.getElements('select[name="theme"]').addEvent('change', function(event) {
         document.head.getElementById('theme').set('href', 'css/prettify/' + this.get('value') + '.css');
 
-        _gaq.push(['_trackEvent', 'Theme Swap', this.get('value')]);
+//        _gaq.push(['_trackEvent', 'Theme Swap', this.get('value')]);
     });
 
     // options form
@@ -219,7 +217,7 @@ window.addEvent('domready', function() {
 
             this.getParent('form').fireEvent(this.dataset.action, event);
 
-            _gaq.push(['_trackEvent', 'oAuth Form', this.dataset.action]);
+//            _gaq.push(['_trackEvent', 'oAuth Form', this.dataset.action]);
         },
 
         'submit': function(event) {
@@ -444,7 +442,7 @@ window.addEvent('domready', function() {
             if (this.dataset.action) {
                 this.getParent('form').fireEvent(this.dataset.action, event);
 
-                _gaq.push(['_trackEvent', 'Request Form', this.dataset.action]);
+//                _gaq.push(['_trackEvent', 'Request Form', this.dataset.action]);
             }
         },
 
@@ -520,7 +518,7 @@ window.addEvent('domready', function() {
                 'request': JSON.decode(localStorage.getItem('request-defaults')),
                 'params': JSON.decode(localStorage.getItem('request-params-defaults')),
                 'headers': JSON.decode(localStorage.getItem('request-headers-defaults'))
-            }
+            };
 
             Object.each(defaults.request, function(value, key) {
                 var input = document.getElement('input[name="{0}"]'.substitute([key]));
@@ -585,7 +583,13 @@ window.addEvent('domready', function() {
             delete headers.encoding;
             delete headers.key;
             delete headers.value;
-            delete headers.file_key;
+	    delete headers.file_key;
+	    // new for events
+	    delete headers.ktoken;
+	    delete headers.domain;
+	    delete headers.type;
+	    delete headers.engine;
+
 
             // unsecure headers:
             var unsafe = [
@@ -615,7 +619,7 @@ window.addEvent('domready', function() {
                     'keys': this.getElements('ul.params input[name="key"]').get('value'),
                     'values': this.getElements('ul.params input[name="value"]').get('value')
                 }
-            }
+            };
 
             // init variables
             request.data = {};
@@ -627,12 +631,14 @@ window.addEvent('domready', function() {
                 }
             });
 
+
+
 	  // [PJW] since we've disabled user selection
 	  // default content type
           headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
-            // validate headers
-            custom.headers.keys.each(function(key, index) {
+	  // validate headers
+	  custom.headers.keys.each(function(key, index) {
                 if (unsafe.contains(key.toLowerCase())) {
                     Error('Unsafe Header', 'Refused to set unsafe header "' + key +'"', this.getElement('ul.headers input[name="key"]:nth-of-type(' + (index + 1) + ')'));
                     error = true;
@@ -671,8 +677,10 @@ window.addEvent('domready', function() {
 				   ];
 	      var esl = schema + esl_components.join("/");
 //	      var esl = "http://www.postbin.org/sj7ta2";
-	      console.log("Raising " + esl + "with " + request.method);
+	      console.log("Raising " + esl + " with " + request.method);
 	      console.log("Attributes " + JSON.stringify(request.data));
+
+
 
                 var options = {
                     'url': esl,
