@@ -4,7 +4,7 @@ A console for raising and debugging events with the Sky API.
 
 ## Using
 
-1. Clond the [Github repo](https://github.com/kynetx/sky_event_console) to your local drive
+1. Clone the [Github repo](https://github.com/kynetx/sky_event_console) to your local drive
 
 2. Load the Chrome Extension Management page (Window -> Extensions)
 
